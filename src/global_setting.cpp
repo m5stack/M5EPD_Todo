@@ -1,5 +1,5 @@
 #include "global_setting.h"
-#include "./resources/ImageResource.h"
+#include "ImageResource.h"
 #include "esp32-hal-log.h"
 #include <WiFi.h>
 
@@ -175,19 +175,19 @@ bool SyncNTPTime(void)
     struct tm timeInfo;
     if (getLocalTime(&timeInfo))
     {
-        RTC_TimeTypeDef time_struct;
-        time_struct.Hours = timeInfo.tm_hour;
-        time_struct.Minutes = timeInfo.tm_min;
-        time_struct.Seconds = timeInfo.tm_sec;
-        M5.RTC.SetTime(&time_struct);
-        RTC_DateTypeDef date_struct;
-        date_struct.WeekDay = timeInfo.tm_wday;
-        date_struct.Month = timeInfo.tm_mon + 1;
-        date_struct.Date = timeInfo.tm_mday;
-        date_struct.Year = timeInfo.tm_year + 1900;
-        M5.RTC.SetDate(&date_struct);
+        rtc_time_t time_struct;
+        time_struct.hour = timeInfo.tm_hour;
+        time_struct.min = timeInfo.tm_min;
+        time_struct.sec = timeInfo.tm_sec;
+        M5.RTC.setTime(&time_struct);
+        rtc_date_t date_struct;
+        date_struct.week = timeInfo.tm_wday;
+        date_struct.mon = timeInfo.tm_mon + 1;
+        date_struct.day = timeInfo.tm_mday;
+        date_struct.year = timeInfo.tm_year + 1900;
+        M5.RTC.setDate(&date_struct);
         SetTimeSynced(1);
-        log_d("Time Synced %d-%d-%d [%d]  %d:%02d:%02d", date_struct.Year, date_struct.Month, date_struct.Date, date_struct.WeekDay, time_struct.Hours, time_struct.Minutes, time_struct.Seconds);
+        log_d("Time Synced %d-%d-%d [%d]  %d:%02d:%02d", date_struct.year, date_struct.mon, date_struct.day, date_struct.week, time_struct.hour, time_struct.min, time_struct.sec);
         return 1;
     }
     log_d("Time Sync failed");
