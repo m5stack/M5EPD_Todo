@@ -1,5 +1,5 @@
 #include "global_setting.h"
-#include "ImageResource.h"
+#include "./resources/ImageResource.h"
 #include "esp32-hal-log.h"
 #include <WiFi.h>
 
